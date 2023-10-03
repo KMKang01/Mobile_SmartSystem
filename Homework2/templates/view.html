@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>전화번호 관리</title>
+<link href="../static/mystyle.css" type="text/css" rel="stylesheet">
+</head>
+<body>
+<h3>전화 번호 전체 출력</h3>
+<hr>
+<table>
+<thead>
+<tr><td>이름</td><td>전화번호</td></tr>
+</thead>
+<tbody>
+{% for name in dict.keys() : %}
+<tr>
+<td>{% print(name) %}</td><td>{% print(dict[name]) %}</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+</br></br>
+<form action="/" method="get">
+        <input type="submit" value="처음으로 돌아가기">
+</form>
+<p>
+<hr>
+</body>
+</html>
