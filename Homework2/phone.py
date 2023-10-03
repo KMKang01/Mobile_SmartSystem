@@ -43,7 +43,7 @@ def view():
         return render_template('view.html', name = phonebook.keys())
 # 전화번호부를 보여주는 함수
 
-@app.route('/init', methods=['GET'])
+@app.route('/init/', methods=['GET'])
 def init():
        file = open('./data/phonebook.txt', 'w')
        file.close()
