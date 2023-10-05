@@ -11,7 +11,7 @@ def store():
         tel = request.args.get('tel')
 
         file = open('./data/phonebook.txt', 'a')
-        data = "%s, %s\n" % (name, tel)
+        data = "%s,%s\n" % (name, tel)
         file.write(data)
         file.close()
 
@@ -29,7 +29,7 @@ def search():
         tel = phonebook.get(name)
         file.close()
 
-        return render_template('index.html', msg='검색되었습니다.')
+        return render_template('index.html', msg='검색되었습니다.', name = name, tel = tel)
 # 이름을 입력하면 전화번호를 찾아주는 함수
 
 @app.route('/view', methods=['GET'])
@@ -40,7 +40,7 @@ def view():
             tmp=line.split(",",1)
             phonebook[tmp[0]]=tmp[1]
 
-        return render_template('view.html', name = phonebook.keys())
+        return render_template('view.html', dict = phonebook)
 # 전화번호부를 보여주는 함수
 
 @app.route('/init/', methods=['GET'])
@@ -54,7 +54,6 @@ if __name__ == '__main__':
         app.run(host='0.0.0.0', port=8080, debug=True)
 
 '''
-        처리해야할 문제:
-        1. search에서 검색을 누르면 이름은 없어지지 않고, 전화번호가 나와야함.
-        2. 전화번호부 전체 보기
+       CSS로 좀 더 꾸미기.
+       추가할 만한 기능은 뭐가 있지?
 '''

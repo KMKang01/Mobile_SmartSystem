@@ -22,8 +22,8 @@
         <h3>검색</h3>
         이름과 전화 번호를 입력하고 검색 버튼을 누르세요
         <br><br>
-        이름 <input type="text" name="name">
-        전화번호 <input type="text" name="tel">
+        이름 <input type="text" name="name" value="{% print(name) %}">
+        전화번호 <input type="text" value="{% print(tel) %}">
         <input type="submit" value="검색">
 </form>
 <hr>
@@ -42,4 +42,3 @@
 </form>
 </body>
 </html>
-
