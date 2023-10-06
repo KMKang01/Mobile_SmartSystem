@@ -14,7 +14,7 @@
         이름과 전화 번호를 입력하고 저장 버튼을 누르세요
         <br><br>
         이름 <input type="text" name="name">
-        전화번호  <input type="text" name="tel" {% print(value) %}>
+        전화번호 <input type="text" name="tel">
         <input type="submit" value="저장">
 </form>
 <hr>
@@ -34,7 +34,7 @@
         <button>전화번호 전체보기</button>
 </form>
 <hr>
-<form action="/init/" method="get">
+<form action="./init/" method="get">
         <h3>초기화</h3>
         초기화 버튼을 누르면 전화번호부에 기록된 내용이 전부 삭제됩니다.
         <br><br>
