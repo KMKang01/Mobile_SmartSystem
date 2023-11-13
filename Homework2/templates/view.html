@@ -13,7 +13,7 @@
 <tr><td>이름</td><td>전화번호</td></tr>
 </thead>
 <tbody>
-{% for name in dict.keys() : %}
+{% for name in dict.keys() : %} <!--dict를 넘겨받은 이후에 dict.keys()의 값들을 name이라는 배열에 저장-->
 <tr>
 <td>{% print(name) %}</td><td>{% print(dict[name]) %}</td>
 </tr>
