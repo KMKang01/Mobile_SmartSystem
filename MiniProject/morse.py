@@ -22,6 +22,7 @@ try:
             fin = 0 if fin == 1 else 1
             led_on_off(ledFin, fin)
 
+
     GPIO.setwarnings(False)
     GPIO.setmode(GPIO.BCM)
 
@@ -50,11 +51,6 @@ try:
 
 except KeyboardInterrupt:
     print("Ctrl + C")
-
-
-
-
-
 
 finally:
     GPIO.cleanup()
