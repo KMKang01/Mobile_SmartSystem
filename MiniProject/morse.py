@@ -4,6 +4,7 @@ import RPi.GPIO as GPIO
 try:
     def led_on_off(pin, value):
         GPIO.output(pin, value)
+        
     def button_pressed(pin):
         global dot # buttonDot에 대한 전역 변수
         global dash # buttonDash에 대한 전역 변수
