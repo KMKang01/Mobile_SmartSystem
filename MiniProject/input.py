@@ -1,4 +1,5 @@
 import time
+from morse import *
 import RPi.GPIO as GPIO
 
 try:
