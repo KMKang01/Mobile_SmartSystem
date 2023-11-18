@@ -3,10 +3,7 @@ from morse import *
 import RPi.GPIO as GPIO
 import Adafruit_MCP3008
 
-
 try:
-
-
     def led_on_off(pin, value):
         GPIO.output(pin, value)
         
