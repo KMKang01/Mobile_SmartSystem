@@ -45,8 +45,10 @@ function onConnectionLost(responseObject) { // responseObject는 응답 패킷
 function onMessageArrived(msg) { // 매개변수 msg는 도착한 MQTT 메시지를 담고 있는 객체
 	console.log("onMessageArrived: " + msg.payloadString);
 	// 도착한 메시지 출력
-	document.getElementById("messages").innerHTML += '<span>토픽 : ' + msg.destinationName + ' | ' + msg.payloadString + 
-		'</span><br/>';
+	var msg_arr = msg.payloadString.replace(/'/g, '"');
+	var send2MQTT = JSON.parse(msg_arr);
+	document.getElementById("morseFromSwitch").innerText += '<span>모스 코드 : ' + send2MQTT.switchUserSentence + '</span><br/>';
+	document.getElementById("sentenceFromSwitch").innerText
 }
 // disconnection 버튼이 선택되었을 때 호출되는 함수
 function disconnect() {
