@@ -11,6 +11,7 @@ try:
         global dotStatus # buttonDot에 대한 전역 변수
         global dashStatus # buttonDash에 대한 전역 변수
         global finStatus # buttonFin에 대한 전역 변수
+        global switchFinPressedTime # buttonFin이 최소 두 번 이상 눌려야 문장이 끝난 것으로 판단하기 위해 만든 변수        
         
         global ledDot
         global ledDash
@@ -28,12 +29,14 @@ try:
             led_on_off(ledDash, dashStatus)
         if pin == 24: # buttonFin이 눌렸을 때 led가 켜짐
             finStatus = 0 if finStatus == 1 else 1
+            switchFinPressedTime += 1
             switchUserSentence += "n" # buttonFin을 눌렀을 때 사용자의 입력에 n 을 추가
             led_on_off(ledFin, finStatus)
 
         # switchUserSentence의 맨 마지막과 그 앞 글자가 n인 경우 morseCode 메소드를 호출하여 번역
-        if switchUserSentence.strip()[-1] == "n" and switchUserSentence.strip()[-2] == "n":
+        if switchUserSentence.strip()[-1] == "n" and switchUserSentence.strip()[-2] == "n" and switchFinPressedTime >= 2:
             sentence = morseCode(switchUserSentence)
+            switchFinPressedTime = 0
             switchUserSentence = "" # 문장 초기화
             print(sentence) # 변환된 문장을 리턴 - 일단 return으로 했는데 나중에 플라스크 앱으로 보낼거임
         else:
@@ -77,6 +80,8 @@ try:
     dashStatus = 0
     finStatus = 0
     switchUserSentence = ""
+    switchFinPressedTime = 0
+
 
     buttonDot = 18 # . 을 입력하는 스위치
     buttonDash = 23 # - 을 입력하는 스위치
@@ -101,11 +106,10 @@ try:
     start = 0 # 조도 센서가 측정을 시작한 시간
     end = 0 # 조도 센서가 측정을 마친 시간
     
-    while True:
-        GPIO.add_event_detect(buttonDot, GPIO.RISING, switchUserInput, bouncetime=10)
-        GPIO.add_event_detect(buttonDash, GPIO.RISING, switchUserInput, bouncetime=10)
-        GPIO.add_event_detect(buttonFin, GPIO.RISING, switchUserInput, bouncetime=10)
-        
+    GPIO.add_event_detect(buttonDot, GPIO.RISING, switchUserInput, bouncetime=10)
+    GPIO.add_event_detect(buttonDash, GPIO.RISING, switchUserInput, bouncetime=10)
+    GPIO.add_event_detect(buttonFin, GPIO.RISING, switchUserInput, bouncetime=10)
+    while True:      
         if light > 100: # 조도 센서의 초기 값은 print(light), sleep(1) 루프로 재측정
             start = time.time() # 초기 값보다 커진 순간의 시간
         else:
