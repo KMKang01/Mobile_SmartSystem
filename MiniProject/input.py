@@ -34,11 +34,12 @@ try:
             led_on_off(ledFin, finStatus)
 
         # switchUserSentence의 맨 마지막과 그 앞 글자가 n인 경우 morseCode 메소드를 호출하여 번역
-        if switchUserSentence.strip()[-1] == "n" and switchUserSentence.strip()[-2] == "n" and switchFinPressedTime >= 2:
-            sentence = morseCode(switchUserSentence)
-            switchFinPressedTime = 0
-            switchUserSentence = "" # 문장 초기화
-            print(sentence) # 변환된 문장을 리턴 - 일단 return으로 했는데 나중에 플라스크 앱으로 보낼거임
+        if switchFinPressedTime >= 2:
+            if switchUserSentence.strip()[-1] == "n" and switchUserSentence.strip()[-2] == "n":
+                sentence = morseCode(switchUserSentence)
+                switchFinPressedTime = 0
+                switchUserSentence = "" # 문장 초기화
+                print(sentence) # 변환된 문장을 리턴 - 일단 return으로 했는데 나중에 플라스크 앱으로 보낼거임
         else:
             switchUserSentence = ""
             print("Wrong Input") # 일단 return으로 했는데 나중에 플라스크 앱으로 보낼거임
