@@ -35,10 +35,10 @@ try:
         if switchUserSentence.strip()[-1] == "n" and switchUserSentence.strip()[-2] == "n":
             sentence = morseCode(switchUserSentence)
             switchUserSentence = "" # 문장 초기화
-            return sentence # 변환된 문장을 리턴 - 일단 return으로 했는데 나중에 플라스크 앱으로 보낼거임
+            print(sentence) # 변환된 문장을 리턴 - 일단 return으로 했는데 나중에 플라스크 앱으로 보낼거임
         else:
             switchUserSentence = ""
-            return "Wrong Input" # 일단 return으로 했는데 나중에 플라스크 앱으로 보낼거임
+            print("Wrong Input") # 일단 return으로 했는데 나중에 플라스크 앱으로 보낼거임
     
     def cdsUserInput(signalTime): # 조도 센서를 사용하여 문장 입력
         global cdsUserSentence # 조도 센서를 사용하여 입력한 모스 코드 문장
@@ -55,19 +55,19 @@ try:
                 sentence = morseCode(cdsUserSentence)
                 cdsUserSentence = "" # 문장 초기화
                 cdsUserStatus = False
-                return sentence # 번역 # 일단 return으로 했는데 나중에 플라스크 앱으로 보낼거임
+                print(sentence) # 번역 # 일단 return으로 했는데 나중에 플라스크 앱으로 보낼거임
             
             elif cdsUserSentence.strip()[-1] == "n" and cdsUserSentence.strip()[-2] != "n":
                 cdsUserSentence += "n" # 맨 마지막이 n인데 1.5초가 넘어간 경우 사용자의 실수로 간주하여 n을 추가하고 번역
                 sentence = morseCode(cdsUserSentence)
                 cdsUserSentence = "" # 문장 초기화
                 cdsUserStatus = False
-                return sentence # 일단 return으로 했는데 나중에 플라스크 앱으로 보낼거임
+                print(sentence) # 일단 return으로 했는데 나중에 플라스크 앱으로 보낼거임
             
             else: # 두 경우 모두 아닌 경우 잘못이 맞다고 판단
                 cdsUserSentence = ""
                 cdsUserStatus = False
-                return "Wrong Input" # 일단 return으로 했는데 나중에 플라스크 앱으로 보낼거임
+                print("Wrong Input") # 일단 return으로 했는데 나중에 플라스크 앱으로 보낼거임
         # 스위치는 제어하기 편하지만 조도 센서는 제어하기 어려운 것을 고려함.
 
     GPIO.setwarnings(False)
