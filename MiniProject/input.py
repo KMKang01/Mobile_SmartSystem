@@ -43,11 +43,11 @@ try:
     def cdsUserInput(signalTime): # 조도 센서를 사용하여 문장 입력
         global cdsUserSentence # 조도 센서를 사용하여 입력한 모스 코드 문장
         global cdsUserStatus # cds사용자가 입력 중인지 아닌지 판단하는 변수
-        if signalTime < 0.15: # 조도 센서가 측정한 시간이 0.15초 미만일 때
+        if signalTime < 0.2: # 조도 센서가 측정한 시간이 0.15초 미만일 때
             cdsUserSentence += "." # . 추가
-        elif 0.15 < signalTime < 0.45: # 조도 센서가 측정한 시간이 0.15~0.45초일 때
+        elif 0.2 < signalTime < 0.6: # 조도 센서가 측정한 시간이 0.2~0.6초일 때
             cdsUserSentence += "-" # - 추가
-        elif 0.45 < signalTime < 0.6: # 조도 센서가 측정한 시간이 0.45~0.6초일 때
+        elif 0.6 < signalTime < 1.0: # 조도 센서가 측정한 시간이 0.6~1.0초일 때
             cdsUserSentence += "n" # n 추가
         elif signalTime >= 1.5: # 측정 시간이 1.5초를 넘어갔을 때
             # cdsUserSentence의 맨 마지막과 그 앞 글자가 n인 경우 morseCode 메소드를 호출하여 번역
@@ -56,12 +56,14 @@ try:
                 cdsUserSentence = "" # 문장 초기화
                 cdsUserStatus = False
                 return sentence # 번역 # 일단 return으로 했는데 나중에 플라스크 앱으로 보낼거임
+            
             elif cdsUserSentence.strip()[-1] == "n" and cdsUserSentence.strip()[-2] != "n":
                 cdsUserSentence += "n" # 맨 마지막이 n인데 1.5초가 넘어간 경우 사용자의 실수로 간주하여 n을 추가하고 번역
                 sentence = morseCode(cdsUserSentence)
                 cdsUserSentence = "" # 문장 초기화
                 cdsUserStatus = False
                 return sentence # 일단 return으로 했는데 나중에 플라스크 앱으로 보낼거임
+            
             else: # 두 경우 모두 아닌 경우 잘못이 맞다고 판단
                 cdsUserSentence = ""
                 cdsUserStatus = False
