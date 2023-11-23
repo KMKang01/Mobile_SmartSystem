@@ -16,7 +16,7 @@
       </script>
    </head>
    <body>
-         <h3>Raspberry 제어 및 모니터링</h3>
+         <h3>모스코드 대화</h3>
          <hr>
          <form id="connection-form">
             <b>브로커 IP:</b>
@@ -26,16 +26,10 @@
             <input type="button" onclick="disconnect()" value="Disconnect">
          </form>
          <hr>
-         <h3>Led 제어(토픽:led)</h3>
          <hr>
-         <hr>
-         <h3>초음파 센서를 이용한 거리 측정(토픽:ultrasonic)</h3>
-         <hr>
-         <form id="subscribe-form">
-            <input type="button" onclick="subscribe('ultrasonic')" value="측정시작">
-            <input type="button" onclick="unsubscribe('ultrasonic')" value="측정중단">
-         </form>
          <div id="messages"></div>
+         <div id="messageSwitch"></div>
+         <div id="messageCds"></div>
    </body>
 </html>
 

@@ -8,7 +8,7 @@ function connect() { // 브로커에 접속하는 함수
 
 	// 사용자가 입력한 브로커의 IP 주소와 포트 번호 알아내기
 	let broker = document.getElementById("broker").value; // 브로커의 IP 주소
-	let port = document.getElementById("port").value; // 브로커의 포트 번호
+	let port = 9001; // 브로커의 포트 번호는 9001로 고정
 	
 	// id가 message인 DIV 객체에 브로커의 IP와 포트 번호 출력
 	document.getElementById("messages").innerHTML += '<span>접속 : ' + broker + ' 포트 ' + port + '</span><br/>';
@@ -45,14 +45,12 @@ function onConnectionLost(responseObject) { // responseObject는 응답 패킷
 function onMessageArrived(msg) { // 매개변수 msg는 도착한 MQTT 메시지를 담고 있는 객체
 	console.log("onMessageArrived: " + msg.payloadString);
 	// 도착한 메시지 출력
-	var msg_arr = msg.payloadString.replace(/'/g, '"');
-	var send2MQTT = JSON.parse(msg_arr);
-	document.getElementById("morseFromSwitch").innerText += '<span>모스 코드 : ' + send2MQTT.switchUserSentence + '</span><br/>';
-	document.getElementById("sentenceFromSwitch").innerText
+	document.getElementById("morseFromSwitch").innerText += '<span>스위치 사용자 님의 모스 코드 : ' + send2MQTT.switchUserSentence + '</span><br/>';
+	document.getElementById("sentenceFromSwitch").innerText += '<span>스위치 사용자 님의 말: ' + send2MQTT.
 }
 // disconnection 버튼이 선택되었을 때 호출되는 함수
 function disconnect() {
-	if(connectionFlag == false) 
+	if(connectionFlag == false)
 		return; // 연결 되지 않은 상태이면 그냥 리턴
 	client.disconnect(); // 브로커와 접속 해제
 	document.getElementById("messages").innerHTML += '<span>연결종료</span><br/>';
