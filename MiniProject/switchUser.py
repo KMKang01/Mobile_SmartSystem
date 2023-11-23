@@ -1,3 +1,5 @@
+# 스위치 입력
+
 import json
 from morse import *
 import RPi.GPIO as GPIO
@@ -13,7 +15,7 @@ try:
         global switchFinPressedTime # buttonFin이 최소 두 번 이상 눌려야 문장이 끝난 것으로 판단하기 위해 만든 변수        
         global switchUserSentence # 스위치를 사용하여 입력한 모스 코드 문장
         global convertedSentence # 변환된 문장
-        global send2MQTT
+        global msgFromSwitch # MQTT로 발행하기 위한 JSON문자열
 
         if pin == 18:
             switchUserSentence += "." # buttonDot이 눌렸을 때 사용자의 입력에 . 을 추가
@@ -30,7 +32,7 @@ try:
             if switchUserSentence[-1] == "n":
                 if switchUserSentence[-2] == "n":
                     convertedSentence = join_jamos(morseCode(switchUserSentence))
-                    send2MQTT = {
+                    msgFromSwitch = {
                         "morse":switchUserSentence,
                         "sentence":convertedSentence
                     }
@@ -43,7 +45,7 @@ try:
     switchUserSentence = ""
     switchFinPressedTime = 0
     convertedSentence = ""
-    send2MQTT = ""
+    msgFromSwitch = ""
 
     ledDot = 17 # . LED
     ledDash = 27 # - LED
@@ -77,7 +79,7 @@ try:
         led_on_off(ledDash, statusOfDash)
         led_on_off(ledFin, statusOfFin)
 
-        client.publish("letter", send2MQTT, qos=0)
+        client.publish("msgFromSwitch", json.dumps(msgFromSwitch), qos=0)
 
 except KeyboardInterrupt:
     print("Ctrl + C")

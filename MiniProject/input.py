@@ -1,3 +1,5 @@
+# 초기버전 코드
+
 import time
 from morse import *
 import RPi.GPIO as GPIO
