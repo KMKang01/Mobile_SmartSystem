@@ -8,8 +8,8 @@ function connect() { // 브로커에 접속하는 함수
 
 	// 사용자가 입력한 브로커의 IP 주소와 포트 번호 알아내기
 	let broker = document.getElementById("broker").value; // 브로커의 IP 주소
-	let port = 9001; // 브로커의 포트 번호는 9001로 고정
-	
+	let port = 9001 // mosquitto를 웹소켓으로 접속할 포트 번호
+
 	// id가 message인 DIV 객체에 브로커의 IP와 포트 번호 출력
 	document.getElementById("messages").innerHTML += '<span>접속 : ' + broker + ' 포트 ' + port + '</span><br/>';
 	document.getElementById("messages").innerHTML += '<span>사용자 ID : ' + CLIENT_ID + '</span><br/>';
@@ -20,19 +20,37 @@ function connect() { // 브로커에 접속하는 함수
 	// client 객체에 콜백 함수 등록 및 연결
 	client.onConnectionLost = onConnectionLost; // 접속 끊김 시 onConnectLost() 실행 
 	client.onMessageArrived = onMessageArrived; // 메시지 도착 시 onMessageArrived() 실행
+
 	// client 객체에게 브로커에 접속 지시
 	client.connect({
 		onSuccess:onConnect, // 브로커로부터 접속 응답 시 onConnect() 실행
 	});
 }
-// 브로커로부터 접속 성공 응답을 받을 때 호출되는 함수
+
+// 브로커로의 접속이 성공할 때 호출되는 함수
 function onConnect() {
-	let topic = document.getElementById("topic").value; // 사용자가 입력한 토픽 문자열 
-	client.subscribe(topic); // 브로커에 구독 신청
-	// 구독 신청하였음을 <div> 영역에 출력
-	document.getElementById("messages").innerHTML += '<span>구독신청: 토픽 ' + topic + '</span><br/>';
+	document.getElementById("messages").innerHTML += '<span>connected' + '</span><br/>';
 	connectionFlag = true; // 연결 상태로 설정
+	client.subscribe("switch")
+	client.subscribe("cds")
 }
+
+function publish(topic, msg) {
+	if(connectionFlag != true) { // 연결되지 않은 경우
+		alert("연결되지 않았음");
+		return false;
+	}
+	client.send(topic, msg, 0, false);
+}
+
+function unsubscribe(topic) {
+	if(connectionFlag != true) return; // 연결되지 않은 경우
+	
+	// 구독 신청 취소를 <div> 영역에 출력
+	document.getElementById("messages").innerHTML += '<span>구독신청취소: 토픽 ' + topic + '</span><br/>';
+	client.unsubscribe(topic, null); // 브로커에 구독 신청 취소
+}
+
 // 접속이 끊어졌을 때 호출되는 함수
 function onConnectionLost(responseObject) { // responseObject는 응답 패킷
 	document.getElementById("messages").innerHTML += '<span>오류 : 접속 끊어짐</span><br/>';
@@ -41,16 +59,28 @@ function onConnectionLost(responseObject) { // responseObject는 응답 패킷
 	}
 	connectionFlag = false; // 연결 되지 않은 상태로 설정
 }
+
 // 메시지가 도착할 때 호출되는 함수
 function onMessageArrived(msg) { // 매개변수 msg는 도착한 MQTT 메시지를 담고 있는 객체
 	console.log("onMessageArrived: " + msg.payloadString);
+	var payload = msg.payloadString;
+	var data = JSON.parse(payload);
 	// 도착한 메시지 출력
-	document.getElementById("morseFromSwitch").innerText += '<span>스위치 사용자 님의 모스 코드 : ' + send2MQTT.switchUserSentence + '</span><br/>';
-	document.getElementById("sentenceFromSwitch").innerText += '<span>스위치 사용자 님의 말: ' + send2MQTT.
+	switch (msg.destinationName){
+		case "switch":
+			document.getElementById("switch").innerHTML += '<span>Switch 사용자 님의 모스 코드 : '+ ' | ' + data.morse + '</span><br/>';
+			document.getElementById("switch").innerHTML += '<span>Switch 사용자 님의 말 : '+ '        | ' + data.sentence + '</span><br/>';
+			break;
+		case "cds":
+			document.getElementById("cds").innerHTML += '<span>Cds 사용자 님의 모스 코드 : '+ ' | ' + data.morse + '</span><br/>';
+			document.getElementById("cds").innerHTML += '<span>Cds 사용자 님의 말 : '+ '        | ' + data.sentence + '</span><br/>';
+			break;
+	}
 }
+
 // disconnection 버튼이 선택되었을 때 호출되는 함수
 function disconnect() {
-	if(connectionFlag == false)
+	if(connectionFlag == false) 
 		return; // 연결 되지 않은 상태이면 그냥 리턴
 	client.disconnect(); // 브로커와 접속 해제
 	document.getElementById("messages").innerHTML += '<span>연결종료</span><br/>';

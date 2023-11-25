@@ -4,6 +4,6 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return ''
+    return render_template('index.html')
 
 app.run(host='0.0.0.0', port=8080, debug=True) # 나중에 호스트 서버와 연결

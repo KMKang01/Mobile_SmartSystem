@@ -19,7 +19,7 @@ try:
 		if count < 30: # count가 30 미만인 경우는 무시(값이 튄 것으로 간주)
 			count = 0
 		elif count <= 150: # 조도 센서가 측정한 횟수가 150 이하일 때
-			cdsUserSentence += "." # . 추가
+			cdsUserSentence += "o" # o 추가 (JSON문자열을 파싱할 때 .을 허용하지 않기 때문)
 		elif 150 < count < 450: # 조도 센서가 측정한 횟수가 150~450일 때
 			cdsUserSentence += "-" # - 추가
 		elif 450 < count < 750 : # 조도 센서가 측정한 횟수가 450~750일 때
@@ -28,32 +28,38 @@ try:
         # cdsUserSentence의 맨 마지막이 n, 길이가 2 이상인 경우
 			if len(cdsUserSentence)>=2 and cdsUserSentence[-1] == "n":
 				if cdsUserSentence[-2] == "n":
-					sentence = morseCode(cdsUserSentence)
-					convertedSentence = join_jamos(sentence)
-					msgFromCds = {
-						"morse":cdsUserSentence,
-						"sentence":convertedSentence
+					convertedSentence = join_jamos(morseCode(cdsUserSentence))
+					data = {
+						"morse" : cdsUserSentence,
+						"sentence" : convertedSentence
 					}
+					dataOfCds = json.dumps(data)
+					send2MQTT(dataOfCds)
 					cdsUserSentence = "" # 문장 초기화
 					count = 0
-					print(join_jamos(sentence)) # MQTT 완성 후 삭제
+					print(data["sentence"]) # MQTT 완성 후 삭제
 				elif cdsUserSentence[-2] != "n":
 					cdsUserSentence += "n" # 맨 마지막이 n인데 750을 넘어간 경우 사용자의 실수로 간주하여 n을 추가하고 번역
-					sentence = morseCode(cdsUserSentence)
-					convertedSentence = join_jamos(sentence)
-					msgFromCds = {
-						"morse":cdsUserSentence,
-						"sentence":convertedSentence
+					convertedSentence = join_jamos(morseCode(cdsUserSentence))
+					data = {
+						"morse" : cdsUserSentence,
+						"sentence" : convertedSentence
 					}
+					dataOfCds = json.dumps(data)
+					send2MQTT(dataOfCds)
 					cdsUserSentence = "" # 문장 초기화
 					count = 0
-					print(join_jamos(sentence)) # MQTT 완성 후 삭제
+					print(data["sentence"]) # MQTT 완성 후 삭제
 			else: # 측정 횟수가 750을 넘었는데 맨 마지막이 n이 아닌 경우
 				print(cdsUserSentence)
 				cdsUserSentence = ""
 				count = 0
 				print("Wrong Input") # 일단 return으로 했는데 나중에 플라스크 앱으로 보낼거임
             	# 스위치는 제어하기 편하지만 조도 센서는 제어하기 어려운 것을 고려함.
+	
+	def send2MQTT(param):
+		client.publish("cds", param, qos=0)
+	
 
 	GPIO.setmode(GPIO.BCM)
 	GPIO.setwarnings(False)
@@ -67,6 +73,7 @@ try:
 	ip = "localhost"
 	client.connect(ip, 1883)
 	client.loop_start()
+
 	while True:
 		light = mcp.read_adc(0) # 조도 센서로부터 값을 받음
 		time.sleep(0.001)
@@ -78,8 +85,6 @@ try:
 				print(count)
 				count = 0
 				continue
-
-		client.publish("msgFromCds", json.dumps(msgFromCds), qos=0)
 
 except KeyboardInterrupt:
     print("Ctrl + C")

@@ -18,7 +18,7 @@ try:
         global msgFromSwitch # MQTT로 발행하기 위한 JSON문자열
 
         if pin == 18:
-            switchUserSentence += "." # buttonDot이 눌렸을 때 사용자의 입력에 . 을 추가
+            switchUserSentence += "o" # buttonDot이 눌렸을 때 사용자의 입력에  o 추가 (JSON문자열을 파싱할 때 .을 허용하지 않기 때문)
         
         if pin == 23:
             switchUserSentence += "-" # buttonDash를 눌렀을 때 사용자의 입력에 - 을 추가
@@ -32,12 +32,17 @@ try:
             if switchUserSentence[-1] == "n":
                 if switchUserSentence[-2] == "n":
                     convertedSentence = join_jamos(morseCode(switchUserSentence))
-                    msgFromSwitch = {
-                        "morse":switchUserSentence,
-                        "sentence":convertedSentence
+                    data = {
+                        "morse" : switchUserSentence,
+                        "sentence" : convertedSentence
                     }
+                    dataOfSwitch = json.dumps(data)
+                    send2MQTT(dataOfSwitch)
                     switchFinPressedTime = 0
                     switchUserSentence = "" # 문장 초기화
+
+    def send2MQTT(param):
+        client.publish("switch", param, qos=0)
 
     GPIO.setmode(GPIO.BCM)
     GPIO.setwarnings(False)
@@ -78,8 +83,6 @@ try:
         led_on_off(ledDot, statusOfDot)
         led_on_off(ledDash, statusOfDash)
         led_on_off(ledFin, statusOfFin)
-
-        client.publish("msgFromSwitch", json.dumps(msgFromSwitch), qos=0)
 
 except KeyboardInterrupt:
     print("Ctrl + C")
