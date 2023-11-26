@@ -24,7 +24,7 @@ try:
 			cdsUserSentence += "-" # - 추가
 		elif 450 < count < 750 : # 조도 센서가 측정한 횟수가 450~750일 때
 			cdsUserSentence += "n" # n 추가
-		elif 750 < count : # 측정 횟수가 750을 넘어갔을 때
+		elif 750 < count : # 측정 횟수가 750을 넘어갔을 때 - 시연할 때 대강 1초 정도 기다린다고 생각
         # cdsUserSentence의 맨 마지막이 n, 길이가 2 이상인 경우
 			if len(cdsUserSentence)>=2 and cdsUserSentence[-1] == "n":
 				if cdsUserSentence[-2] == "n":

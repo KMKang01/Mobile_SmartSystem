@@ -68,12 +68,10 @@ function onMessageArrived(msg) { // 매개변수 msg는 도착한 MQTT 메시지
 	// 도착한 메시지 출력
 	switch (msg.destinationName){
 		case "switch":
-			document.getElementById("switch").innerHTML += '<span>Switch 사용자 님의 모스 코드 : '+ ' | ' + data.morse + '</span><br/>';
-			document.getElementById("switch").innerHTML += '<span>Switch 사용자 님의 말 : '+ '        | ' + data.sentence + '</span><br/>';
+			document.getElementById("chatWindow").innerHTML += '<span class="switch">' + data.morse + '<br>─────────────<br>' + data.sentence + '</span>';
 			break;
 		case "cds":
-			document.getElementById("cds").innerHTML += '<span>Cds 사용자 님의 모스 코드 : '+ ' | ' + data.morse + '</span><br/>';
-			document.getElementById("cds").innerHTML += '<span>Cds 사용자 님의 말 : '+ '        | ' + data.sentence + '</span><br/>';
+			document.getElementById("chatWindow").innerHTML += '<span class="cds">' + data.morse + '<br>─────────────<br>' + data.sentence +  '</span>';
 			break;
 	}
 }
