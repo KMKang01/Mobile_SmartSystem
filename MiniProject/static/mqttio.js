@@ -84,3 +84,23 @@ function disconnect() {
 	document.getElementById("messages").innerHTML += '<span>연결종료</span><br/>';
 	connectionFlag = false; // 연결 되지 않은 상태로 설정
 }
+
+function toggleImage(){
+	var image = document.getElementById("morsecodetable");
+	// 이미지가 현재 보이는 상태이면 숨김, 숨겨진 상태이면 보이게 설정
+	if (image.style.display === "none") {
+		image.style.width = "560px";
+        image.style.height = "450px";
+        image.style.top = "30px";
+        image.style.right = "20px";
+        image.style.display = "inline";
+	} else {
+		image.style.display = "none";
+	}
+}
+
+function init(){
+	var chatWindow = document.getElementById("chatWindow");
+
+	chatWindow.innerHTML = "";
+}
