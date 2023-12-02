@@ -75,7 +75,6 @@ function onMessageArrived(msg) { // 매개변수 msg는 도착한 MQTT 메시지
 			break;
 	}
 }
-
 // disconnection 버튼이 선택되었을 때 호출되는 함수
 function disconnect() {
 	if(connectionFlag == false) 

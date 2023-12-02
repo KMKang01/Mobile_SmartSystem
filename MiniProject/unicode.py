@@ -1,3 +1,6 @@
+# 이 코드는 모스 코드를 변환한 뒤에 분리되어 있는 문자열을 합치기 위한 모듈임.
+# 코드 출처: https://github.com/kaniblu/hangul-utils
+
 __all__ = ["split_syllable_char", "split_syllables",
            "join_jamos", "join_jamos_char",
            "CHAR_INITIALS", "CHAR_MEDIALS", "CHAR_FINALS"]
