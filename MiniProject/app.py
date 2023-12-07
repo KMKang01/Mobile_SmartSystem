@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return render_template('index.html') 
-# templates 디렉토리의 index.html 파일을 render_template 함수를 이용해 웹 페이지를 보다 동적으로 만듦.
+    return render_template('index.html')
+# templates 디렉토리의 index.html 파일을 render_template 함수를 이용해 웹 페이지를 동적으로 만듦.
 
 app.run(host='0.0.0.0', port=8080, debug=True)

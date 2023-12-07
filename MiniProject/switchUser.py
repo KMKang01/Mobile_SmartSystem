@@ -1,14 +1,14 @@
 # 스위치 입력
 
-import json
-from morse import *
+import json # JSON 문자열 사용
+from morse import * # morse 변환 함수
 import RPi.GPIO as GPIO
 import paho.mqtt.client as mqtt
 
 global client
 client = mqtt.Client()
 try:
-    def led_on_off(pin, value):
+    def led_on_off(pin, value): # LED 제어 함수
         GPIO.output(pin, value)
         
     def switchUserInput(pin): #LED에 불이 들어오면서 동시에 스위치를 이용하여 입력한 문장이 생성됨
@@ -17,21 +17,21 @@ try:
         global convertedSentence # 변환된 문장
         global msgFromSwitch # MQTT로 발행하기 위한 JSON문자열
 
-        if pin == 18:
-            switchUserSentence += "o" # buttonDot이 눌렸을 때 사용자의 입력에  o 추가 (JSON문자열을 파싱할 때 .을 허용하지 않기 때문)
+        if pin == 18: # 단음에 해당하는 스위치
+            switchUserSentence += "o" # buttonDot이 눌렸을 때 사용자의 입력에 o 추가 (JSON문자열을 파싱할 때 .을 허용하지 않기 때문)
         
-        if pin == 23:
+        if pin == 23: # 장음에 해당하는 스위치
             switchUserSentence += "-" # buttonDash를 눌렀을 때 사용자의 입력에 - 을 추가
         
-        if pin == 24:
-            switchFinPressedTime += 1
+        if pin == 24: # 띄어쓰기, 문장 종료(모스 부호 문장에서 n으로 설정)에 해당하는 스위치
+            switchFinPressedTime += 1 # n이 두번 눌린 경우 종료임을 알리기 위해 추가한 전역 변수
             switchUserSentence += "n" # buttonFin을 눌렀을 때 사용자의 입력에 n 을 추가
         
         # switchUserSentence의 맨 마지막과 그 앞 글자가 n인 경우 morseCode 메소드를 호출하여 번역
-        if switchFinPressedTime >= 2:
-            if switchUserSentence[-1] == "n":
-                if switchUserSentence[-2] == "n":
-                    convertedSentence = join_jamos(morseCode(switchUserSentence))
+        if switchFinPressedTime >= 2: # n이 두 번 눌린 경우
+            if switchUserSentence[-1] == "n": # 모스 문장의 맨 마지막이 n인 경우
+                if switchUserSentence[-2] == "n": # 모스 문장의 마지막 글자의 앞 글자가 n인 경우(정상적인 입력)
+                    convertedSentence = join_jamos(morseCode(switchUserSentence)) # 
                     data = {
                         "morse" : switchUserSentence,
                         "sentence" : convertedSentence
