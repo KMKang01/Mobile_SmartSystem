@@ -19,7 +19,7 @@ try:
 		if count < 30: # count가 30 미만인 경우는 무시(값이 튄 것으로 간주)
 			count = 0
 		elif count <= 150: # 조도 센서가 측정한 횟수가 150 이하일 때
-			cdsUserSentence += "o" # o 추가 (JSON문자열을 파싱할 때 .을 허용하지 않기 때문)
+			cdsUserSentence += "." # . 추가
 		elif 150 < count < 450: # 조도 센서가 측정한 횟수가 150~450일 때
 			cdsUserSentence += "-" # - 추가
 		elif 450 < count < 750 : # 조도 센서가 측정한 횟수가 450~750일 때

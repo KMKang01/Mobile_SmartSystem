@@ -18,7 +18,7 @@ try:
         global msgFromSwitch # MQTT로 발행하기 위한 JSON문자열
 
         if pin == 18: # 단음에 해당하는 스위치
-            switchUserSentence += "o" # buttonDot이 눌렸을 때 사용자의 입력에 o 추가 (JSON문자열을 파싱할 때 .을 허용하지 않기 때문)
+            switchUserSentence += "." # buttonDot이 눌렸을 때 사용자의 입력에 . 추가
         
         if pin == 23: # 장음에 해당하는 스위치
             switchUserSentence += "-" # buttonDash를 눌렀을 때 사용자의 입력에 - 을 추가
